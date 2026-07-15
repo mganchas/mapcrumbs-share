@@ -152,14 +152,14 @@ const renderPreview = (payload) => {
     labelEl.textContent = 'Shared link';
     titleEl.textContent = 'Waiting for you in the app';
     subtitleEl.textContent =
-      'Install MapCrumbs to view this place, city, or live journey.';
+      'Install MapCrumbs to view this Crumb, city, or live journey.';
     return;
   }
 
   switch (payload.type) {
     case 'crumb':
-      taglineEl.textContent = 'A friend shared a place with you';
-      labelEl.textContent = 'Place';
+      taglineEl.textContent = 'A friend shared a Crumb with you';
+      labelEl.textContent = 'Crumb';
       titleEl.textContent = payload.name;
       subtitleEl.textContent = payload.locality;
       break;
