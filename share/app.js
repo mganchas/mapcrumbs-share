@@ -1,8 +1,6 @@
 const STORE_IOS = 'https://apps.apple.com/app/id1572710265';
-const STORE_ANDROID =
-  'https://play.google.com/store/apps/details?id=org.lumi.mapcrumbs';
 const INSTALL_FOOTNOTE =
-  "Don't have MapCrumbs yet? Install it from the store, then scan again.";
+  'Install MapCrumbs, then scan the code again to open this.';
 
 const SHARE_PAYLOAD_VERSION = 1;
 const MAX_SHARE_PAYLOAD_ENCODED_LENGTH = 2048;
@@ -12,7 +10,13 @@ const decodeBase64Url = (input) => {
   const padding = normalized.length % 4;
   const padded =
     padding === 0 ? normalized : normalized + '='.repeat(4 - padding);
-  return atob(padded);
+  const binary = atob(padded);
+  return decodeURIComponent(
+    binary
+      .split('')
+      .map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, '0')}`)
+      .join(''),
+  );
 };
 
 const isFiniteNumber = (value) =>
@@ -141,37 +145,43 @@ const renderPreview = (payload) => {
   const titleEl = document.getElementById('preview-title');
   const subtitleEl = document.getElementById('preview-subtitle');
   const labelEl = document.getElementById('preview-label');
+  const taglineEl = document.getElementById('brand-tagline');
 
   if (!payload) {
+    taglineEl.textContent = 'Open this share in MapCrumbs';
     labelEl.textContent = 'Shared link';
-    titleEl.textContent = 'Open in MapCrumbs';
+    titleEl.textContent = 'Waiting for you in the app';
     subtitleEl.textContent =
-      'Install the app to view this place, city, or live journey.';
+      'Install MapCrumbs to view this place, city, or live journey.';
     return;
   }
 
   switch (payload.type) {
     case 'crumb':
+      taglineEl.textContent = 'A friend shared a place with you';
       labelEl.textContent = 'Place';
       titleEl.textContent = payload.name;
       subtitleEl.textContent = payload.locality;
       break;
     case 'city':
+      taglineEl.textContent = 'A friend shared a city with you';
       labelEl.textContent = 'City';
       titleEl.textContent = payload.name;
       subtitleEl.textContent = payload.country_name;
       break;
     case 'journey_invite':
+      taglineEl.textContent = "You're invited to follow a live journey";
       labelEl.textContent = 'Live journey';
-      titleEl.textContent = 'Join live journey';
+      titleEl.textContent = 'Join the journey';
       subtitleEl.textContent = payload.owner_name
-        ? `Shared by ${payload.owner_name}`
-        : 'Follow along in MapCrumbs.';
+        ? `${payload.owner_name} is sharing their trip`
+        : 'Follow along in real time in MapCrumbs.';
       break;
     default:
+      taglineEl.textContent = 'Open this share in MapCrumbs';
       labelEl.textContent = 'Shared link';
-      titleEl.textContent = 'Open in MapCrumbs';
-      subtitleEl.textContent = 'Install the app to continue.';
+      titleEl.textContent = 'Waiting for you in the app';
+      subtitleEl.textContent = 'Install MapCrumbs to continue.';
   }
 };
 
@@ -181,7 +191,6 @@ const init = () => {
   renderPreview(payload);
 
   document.getElementById('store-ios').href = STORE_IOS;
-  document.getElementById('store-android').href = STORE_ANDROID;
   document.getElementById('footnote').textContent = INSTALL_FOOTNOTE;
 };
 
