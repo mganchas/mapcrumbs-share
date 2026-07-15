@@ -39,6 +39,13 @@ main {
   margin-bottom: 28px;
 }
 
+.brand-logo {
+  display: block;
+  width: 48px;
+  height: auto;
+  margin: 0 auto 12px;
+}
+
 .brand h1 {
   margin: 0;
   font-size: 1.75rem;
