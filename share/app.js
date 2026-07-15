@@ -44,16 +44,23 @@ const parseCrumbPayload = (raw) => {
     !isNonEmptyString(raw.locality) ||
     typeof raw.category !== 'number' ||
     !isOptionalString(raw.notes, 500) ||
-    !isOptionalString(raw.google_id)
+    !isOptionalString(raw.google_id) ||
+    !isOptionalString(raw.owner_name)
   ) {
     return null;
   }
 
-  return {
+  const payload = {
     type: 'crumb',
     name: String(raw.name).trim(),
     locality: String(raw.locality).trim(),
   };
+
+  if (typeof raw.owner_name === 'string' && raw.owner_name.trim().length > 0) {
+    payload.owner_name = raw.owner_name.trim();
+  }
+
+  return payload;
 };
 
 const parseCityPayload = (raw) => {
@@ -64,16 +71,23 @@ const parseCityPayload = (raw) => {
     !isFiniteNumber(raw.lat) ||
     !isFiniteNumber(raw.lng) ||
     !isValidLat(raw.lat) ||
-    !isValidLng(raw.lng)
+    !isValidLng(raw.lng) ||
+    !isOptionalString(raw.owner_name)
   ) {
     return null;
   }
 
-  return {
+  const payload = {
     type: 'city',
     name: String(raw.name).trim(),
     country_name: String(raw.country_name).trim(),
   };
+
+  if (typeof raw.owner_name === 'string' && raw.owner_name.trim().length > 0) {
+    payload.owner_name = raw.owner_name.trim();
+  }
+
+  return payload;
 };
 
 const parseJourneyInvitePayload = (raw) => {
@@ -158,13 +172,17 @@ const renderPreview = (payload) => {
 
   switch (payload.type) {
     case 'crumb':
-      taglineEl.textContent = 'A friend shared a Crumb with you';
+      taglineEl.textContent = payload.owner_name
+        ? `${payload.owner_name} shared a Crumb with you`
+        : 'A friend shared a Crumb with you';
       labelEl.textContent = 'Crumb';
       titleEl.textContent = payload.name;
       subtitleEl.textContent = payload.locality;
       break;
     case 'city':
-      taglineEl.textContent = 'A friend shared a city with you';
+      taglineEl.textContent = payload.owner_name
+        ? `${payload.owner_name} shared a city with you`
+        : 'A friend shared a city with you';
       labelEl.textContent = 'City';
       titleEl.textContent = payload.name;
       subtitleEl.textContent = payload.country_name;
@@ -174,7 +192,7 @@ const renderPreview = (payload) => {
       labelEl.textContent = 'Live journey';
       titleEl.textContent = 'Join the journey';
       subtitleEl.textContent = payload.owner_name
-        ? `${payload.owner_name} is sharing their trip`
+        ? `${payload.owner_name} is sharing a trip`
         : 'Follow along in real time in MapCrumbs.';
       break;
     default:
