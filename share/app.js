@@ -1,6 +1,10 @@
 const STORE_IOS = 'https://apps.apple.com/app/id1572710265';
+const CUSTOM_SCHEME = 'org.lumi.mapcrumbs';
 const INSTALL_FOOTNOTE =
   'Install MapCrumbs, then scan the code again to open this.';
+
+const buildCustomSchemeUrl = (encoded) =>
+  `${CUSTOM_SCHEME}://share?d=${encodeURIComponent(encoded)}`;
 
 const SHARE_PAYLOAD_VERSION = 1;
 const MAX_SHARE_PAYLOAD_ENCODED_LENGTH = 2048;
@@ -208,8 +212,18 @@ const init = () => {
   const payload = encoded ? decodeSharePayload(encoded) : null;
   renderPreview(payload);
 
-  document.getElementById('store-ios').href = STORE_IOS;
+  const openAppEl = document.getElementById('open-app');
+  const storeEl = document.getElementById('store-ios');
+  storeEl.href = STORE_IOS;
   document.getElementById('footnote').textContent = INSTALL_FOOTNOTE;
+
+  if (!encoded) {
+    openAppEl.hidden = true;
+    return;
+  }
+
+  openAppEl.href = buildCustomSchemeUrl(encoded);
+  openAppEl.hidden = false;
 };
 
 init();
