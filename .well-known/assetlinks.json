@@ -3,9 +3,11 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "org.lumi.mapcrumbs",
+      "package_name": "app.mapcrumbs",
       "sha256_cert_fingerprints": [
-        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
+        "3B:2B:00:5D:50:4F:29:99:46:77:E5:EB:AD:EA:70:08:24:9A:35:37:E3:D5:43:D9:F4:8B:29:D3:7A:9A:8C:5F",
+        "99:EF:A2:5B:11:54:83:4C:75:00:35:FC:1E:A8:00:06:1D:66:B4:C8:D7:FC:F9:7B:C9:3F:38:81:04:1B:43:70"
       ]
     }
   }
