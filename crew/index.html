@@ -6,6 +6,14 @@
     <meta name="description" content="Join a MapCrumbs Crew" />
     <title>Join MapCrumbs Crew</title>
     <link rel="stylesheet" href="../share/styles.css" />
+    <style>
+      .store-btn {
+        font-weight: 500;
+      }
+      .store-btn[hidden] {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <main>
@@ -17,21 +25,29 @@
       <section class="card">
         <p class="preview-label">Crew invite</p>
         <h2 class="preview-title">Compare travel progress together</h2>
-        <p class="preview-subtitle">Open this invite in MapCrumbs. If I install first, I reopen this link after setup.</p>
+        <p class="preview-subtitle">Open this invite in MapCrumbs. No app yet? Install it, then open this link again.</p>
         <div class="actions">
-          <a id="open-app" class="store-btn store-btn-primary" href="#">Open in MapCrumbs</a>
-          <a class="store-btn" href="https://apps.apple.com/app/id1572710265">Get MapCrumbs</a>
-          <a class="store-btn" href="https://play.google.com/store/apps/details?id=app.mapcrumbs">Get it on Google Play</a>
+          <a id="open-app" class="store-btn store-btn-primary" href="#" hidden>Open in MapCrumbs</a>
+          <a id="store-ios" class="store-btn" href="https://apps.apple.com/app/id1572710265">App Store</a>
+          <a id="store-android" class="store-btn" href="https://play.google.com/store/apps/details?id=app.mapcrumbs">Google Play</a>
         </div>
       </section>
     </main>
     <script>
       const token = new URLSearchParams(location.search).get('i');
       const open = document.getElementById('open-app');
-      if (!token || !/^[A-Za-z0-9_-]{20,120}$/.test(token)) {
-        open.hidden = true;
-      } else {
+      if (token && /^[A-Za-z0-9_-]{20,120}$/.test(token)) {
         open.href = `org.lumi.mapcrumbs://crew?i=${encodeURIComponent(token)}`;
+        open.hidden = false;
+      } else {
+        open.hidden = true;
+      }
+
+      const isAndroid = /Android/i.test(navigator.userAgent || '');
+      if (isAndroid) {
+        const ios = document.getElementById('store-ios');
+        const android = document.getElementById('store-android');
+        ios.parentNode.insertBefore(android, ios);
       }
     </script>
   </body>
