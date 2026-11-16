@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Cities shared on MapCrumbs" />
+    <title>Cities shared · MapCrumbs</title>
+    <link rel="stylesheet" href="../share/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header class="brand">
+        <img class="brand-logo" src="../share/assets/app-logo.png" width="48" height="56" alt="" />
+        <h1>MapCrumbs</h1>
+        <p>Cities shared with you</p>
+      </header>
+      <section class="card">
+        <p class="preview-label">City share</p>
+        <h2 class="preview-title">Add these cities to your map</h2>
+        <p class="preview-subtitle">Open this link in MapCrumbs to pick which cities to add. If you install first, reopen this link after setup.</p>
+        <div class="actions">
+          <a id="open-app" class="store-btn store-btn-primary" href="#">Open in MapCrumbs</a>
+          <a class="store-btn" href="https://apps.apple.com/app/id1572710265">Get MapCrumbs</a>
+          <a class="store-btn" href="https://play.google.com/store/apps/details?id=org.lumi.mapcrumbs">Get it on Google Play</a>
+        </div>
+      </section>
+    </main>
+    <script>
+      const token = new URLSearchParams(location.search).get('i');
+      const open = document.getElementById('open-app');
+      if (!token || !/^[A-Za-z0-9_-]{20,120}$/.test(token)) {
+        open.hidden = true;
+      } else {
+        open.href = `org.lumi.mapcrumbs://cities?i=${encodeURIComponent(token)}`;
+      }
+    </script>
+  </body>
+</html>
